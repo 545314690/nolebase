@@ -5,7 +5,7 @@ on:
   # push:
   #   branches:
   #     - 'main'
-  
+
 
 env:
   STORE_PATH: ''
@@ -55,7 +55,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 构建
-        run: pnpm docs:build
+        run: pnpm docs:build  -- --base /nolebase-template/
 
       - name: 推送到 gh-pages 分支
         timeout-minutes: 10
