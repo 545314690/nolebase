@@ -64,11 +64,12 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 安装依赖
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
+#          --frozen-lockfile
 
       - name: 构建
         run: |
-          pnpm docs:build
+          pnpm docs:build && ls
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4

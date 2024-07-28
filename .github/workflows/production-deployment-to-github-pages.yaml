@@ -20,7 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: 正式 Production - GitHub Pages
-      url: https://nolebase.github.io/nolebase
+#      url: https://nolebase.github.io/nolebase
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: 签出代码
         uses: actions/checkout@v3
@@ -55,8 +56,13 @@ jobs:
 #        run: pnpm install --frozen-lockfile
         run: pnpm install
 
+      - name: 查看构建目录
+        run: ls /home/runner/work/nolebase/
+
       - name: 构建
-        run: pnpm docs:build  -- --base /nolebase-template/
+        run: pnpm docs:build  -- --base /nolebase/ && ls /home/runner/work/nolebase/nolebase/
+      - name: 查看构建结果
+        run: ls /home/runner/work/nolebase/nolebase/
 
       - name: 推送到 gh-pages 分支
         timeout-minutes: 10
