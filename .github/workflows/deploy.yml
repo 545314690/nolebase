@@ -20,17 +20,44 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: 签出代码
+        uses: actions/checkout@v3
         with:
-          node-version: 'lts/*'
+          fetch-depth: 0
 
-      - name: Install dependencies
-        run: npm install
+      - name: 安装 Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          run_install: false
+          version: 8
+
+      - name: 获取 pnpm store 目录
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: 配置 pnpm 缓存
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 安装依赖
+        #        run: pnpm install --frozen-lockfile
+        run: pnpm install
+
+      - name: 查看构建目录
+        run: ls -la /home/runner/work/nolebase/
 
       - name: 构建
-        run: npm docs:build --base /nolebase/
+        run: pnpm docs:build --base /nolebase/
 
       - name: 查看构建结果
         run: ls -la  /home/runner/work/nolebase/nolebase/
