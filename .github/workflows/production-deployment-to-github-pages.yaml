@@ -57,12 +57,12 @@ jobs:
         run: pnpm install
 
       - name: 查看构建目录
-        run: ls /home/runner/work/nolebase/
+        run: ls -la /home/runner/work/nolebase/
 
       - name: 构建
-        run: pnpm docs:build  -- --base /nolebase/ && ls /home/runner/work/nolebase/nolebase/
+        run: pnpm docs:build --base /nolebase/
       - name: 查看构建结果
-        run: ls /home/runner/work/nolebase/nolebase/
+        run: ls -la  /home/runner/work/nolebase/nolebase/
 
       - name: 推送到 gh-pages 分支
         timeout-minutes: 10
